@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Budget Management</h1>
+    
+    <div class="budget-details">
+        <h2>Current Budget</h2>
+        <p>Limit: ${{ budget.limit }}</p>
+        <p>Current Spending: ${{ budget.current_spending }}</p>
+        <p>Remaining: ${{ budget.limit|add:budget.current_spending|neg }}</p>
+    </div>
+
+    <hr>
+
+    <h3>Set a New Budget</h3>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Save New Budget</button>
+    </form>
+
+    <hr>
+
+    <h3>Track Transactions</h3>
+    <p><a href="{% url 'income_expense' %}">Add a new transaction</a></p>
+{% endblock %}

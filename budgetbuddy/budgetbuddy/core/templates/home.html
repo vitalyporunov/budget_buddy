@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Welcome to BudgetBuddy!</h1>
+    <p>Track your income, expenses, savings, and more!</p>
+    <p>Start by <a href="{% url 'signup' %}">signing up</a> or <a href="{% url 'login' %}">logging in</a>.</p>
+{% endblock %}
