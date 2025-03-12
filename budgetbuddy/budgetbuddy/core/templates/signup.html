@@ -8,9 +8,13 @@
         <div class="error-messages">
             <ul>
                 {% for field in form %}
-                    {% for error in field.errors %}
-                        <li>{{ error }}</li>
-                    {% endfor %}
+                    {% if field.errors %}
+                        <li>
+                            {% for error in field.errors %}
+                                <strong>{{ field.label }}:</strong> {{ error }}<br>
+                            {% endfor %}
+                        </li>
+                    {% endif %}
                 {% endfor %}
             </ul>
         </div>
@@ -19,12 +23,20 @@
     <!-- The Sign-Up Form -->
     <form method="post">
         {% csrf_token %}
-        <label for="id_username">Username:</label>
-        {{ form.username }}  <!-- Renders the form's username field -->
-        <label for="id_password1">Password:</label>
-        {{ form.password1 }}  <!-- Renders the password field -->
-        <label for="id_password2">Confirm Password:</label>
-        {{ form.password2 }}  <!-- Renders the password confirmation field -->
+        <div class="form-group">
+            <label for="id_username">Username:</label>
+            {{ form.username }}  <!-- Renders the form's username field -->
+        </div>
+
+        <div class="form-group">
+            <label for="id_password1">Password:</label>
+            {{ form.password1 }}  <!-- Renders the password field -->
+        </div>
+
+        <div class="form-group">
+            <label for="id_password2">Confirm Password:</label>
+            {{ form.password2 }}  <!-- Renders the password confirmation field -->
+        </div>
 
         <button type="submit">Sign Up</button>
     </form>

@@ -122,10 +122,12 @@ USE_TZ = True
 
 import os
 
-STATIC_URL = 'static/'
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+STATIC_URL = '/static/'
+
 STATICFILES_DIRS = [
-    BASE_DIR / 'budgetbuddy/static',  # This should point to the "static" directory in your project
+    os.path.join(BASE_DIR, 'budgetbuddy/static'),  
 ]
 import os
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+STATIC_ROOT = BASE_DIR / 'staticfiles'

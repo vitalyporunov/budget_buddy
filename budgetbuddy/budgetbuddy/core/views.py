@@ -33,7 +33,7 @@ def login_view(request):
         user = authenticate(request, username=username, password=password)
         if user:
             login(request, user)
-            return redirect('dashboard')  # Redirect to the dashboard after successful login
+            return redirect('dashboard')  
         else:
             messages.error(request, "Invalid username or password. Please try again.")
     
@@ -48,7 +48,7 @@ def logout_view(request):
 @login_required
 def budget_view(request):
     user = request.user
-    budget, created = Budget.objects.get_or_create(user=user)  # Get or create user's budget
+    budget, created = Budget.objects.get_or_create(user=user) 
 
     if request.method == 'POST':
         try:
