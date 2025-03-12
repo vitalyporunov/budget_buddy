@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Financial Reports & Insights</h1>
+    <!-- Display feedback messages -->
+    {% if message %}
+        <p style="color: red;">{{ message }}</p>
+    {% endif %}
+
+    <!-- Report Summary -->
+    <h2>Summary of Your Financial Activity</h2>
+    <p><strong>Total Income:</strong> ${{ total_income }}</p>
+    <p><strong>Total Expenses:</strong> ${{ total_expenses }}</p>
+    <p><strong>Net Savings:</strong> ${{ net_savings }}</p>
+
+    <!-- Pie Chart for Spending Categories -->
+    <h2>Spending by Category</h2>
+    <div>
+        <img src="{{ category_pie_chart_url }}" alt="Spending by Category">
+    </div>
+
+    <!-- Line Graph for Income & Expenses Over Time -->
+    <h2>Income & Expenses Over Time</h2>
+    <div>
+        <img src="{{ income_expenses_line_graph_url }}" alt="Income and Expenses Over Time">
+    </div>
+
+    <p>For more detailed analysis, you can review your <a href="{% url 'income_expense' %}">income and expense history</a>.</p>
+{% endblock %}

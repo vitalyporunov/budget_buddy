@@ -2,9 +2,33 @@
 
 {% block content %}
     <h1>Sign Up</h1>
+
+    <!-- Display any form errors -->
+    {% if form.errors %}
+        <div class="error-messages">
+            <ul>
+                {% for field in form %}
+                    {% for error in field.errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+
+    <!-- The Sign-Up Form -->
     <form method="post">
         {% csrf_token %}
-        {{ form.as_p }}
+        <label for="id_username">Username:</label>
+        {{ form.username }}  <!-- Renders the form's username field -->
+        <label for="id_password1">Password:</label>
+        {{ form.password1 }}  <!-- Renders the password field -->
+        <label for="id_password2">Confirm Password:</label>
+        {{ form.password2 }}  <!-- Renders the password confirmation field -->
+
         <button type="submit">Sign Up</button>
     </form>
+
+    <p>Already have an account? <a href="{% url 'login' %}">Login here</a></p>
 {% endblock %}
+

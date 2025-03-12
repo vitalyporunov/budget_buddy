@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Login to BudgetBuddy</h1>
+    <!-- Display error message if the login attempt fails -->
+    {% if message %}
+        <p style="color: red;">{{ message }}</p>
+    {% endif %}
+    <!-- Login Form -->
+    <form method="post">
+        {% csrf_token %}
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+        <button type="submit">Log In</button>
+    </form>
+
+    <p>Don't have an account? <a href="{% url 'signup' %}">Sign Up</a></p>
+    <p><a href="{% url 'home' %}">Back to Home</a></p>
+{% endblock %}
