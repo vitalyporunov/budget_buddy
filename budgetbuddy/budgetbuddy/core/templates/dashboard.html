@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Welcome, {{ user.username }}!</h1>
+
+    <div class="dashboard-summary">
+        <h2>Financial Overview</h2>
+
+        <!-- Current Budget -->
+        <div class="overview-item">
+            <h3>Current Budget</h3>
+            <p>Spending Limit: ${{ budget.limit }}</p>
+            <p>Current Spending: ${{ budget.current_spending }}</p>
+            <a href="{% url 'budget' %}">Manage Budget</a>
+        </div>
+
+        <!-- Savings Goals -->
+        <div class="overview-item">
+            <h3>Savings Goals</h3>
+            {% for goal in savings_goals %}
+                <p>{{ goal.goal_name }}: ${{ goal.current_balance }} / ${{ goal.target_amount }}</p>
+            {% empty %}
+                <p>You have no savings goals set yet.</p>
+            {% endfor %}
+            <a href="{% url 'goal_create' %}">Create a New Goal</a>
+        </div>
+
+        <!-- Recent Transactions -->
+        <div class="overview-item">
+            <h3>Recent Transactions</h3>
+            {% for transaction in transactions %}
+                <p>{{ transaction.transaction_date }} - {{ transaction.category }}: ${{ transaction.amount }} ({{ transaction.transaction_type }})</p>
+            {% empty %}
+                <p>You have no transactions yet.</p>
+            {% endfor %}
+            <a href="{% url 'income_expense' %}">Add a Transaction</a>
+        </div>
+
+        <!-- Links to other features -->
+        <div class="links">
+            <a href="{% url 'reports' %}">View Financial Reports</a>
+            <a href="{% url 'debt' %}">Track Your Debts</a>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Your Savings Goals</h1>
+
+    <!-- Display existing goals -->
+    <div class="goal-list">
+        <h2>Current Goals</h2>
+        {% for goal in goals %}
+            <div class="goal-item">
+                <h3>{{ goal.goal_name }}</h3>
+                <p>Current Balance: ${{ goal.current_balance }} / ${{ goal.target_amount }}</p>
+                <p>Status: {% if goal.current_balance >= goal.target_amount %}Goal Reached{% else %}In Progress{% endif %}</p>
+                <a href="{% url 'goal_update' goal.id %}">Update Goal</a>
+            </div>
+        {% empty %}
+            <p>You don't have any savings goals yet.</p>
+        {% endfor %}
+    </div>
+
+    <!-- Form to create a new savings goal -->
+    <h2>Create a New Goal</h2>
+    <form method="post">
+        {% csrf_token %}
+        <label for="goal_name">Goal Name:</label>
+        <input type="text" id="goal_name" name="goal_name" required><br><br>
+
+        <label for="target_amount">Target Amount:</label>
+        <input type="number" id="target_amount" name="target_amount" required><br><br>
+
+        <label for="current_balance">Current Balance:</label>
+        <input type="number" id="current_balance" name="current_balance" value="0" required><br><br>
+
+        <button type="submit">Create Goal</button>
+    </form>
+{% endblock %}
