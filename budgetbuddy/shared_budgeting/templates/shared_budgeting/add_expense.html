@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h2 class="text-center">Add Expense to {{ budget.name }}</h2>
+
+    <form method="post" class="card p-4 shadow">
+        {% csrf_token %}
+
+        <div class="mb-3">
+            <label class="form-label">Expense Description</label>
+            {{ form.description }}
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Amount ($)</label>
+            {{ form.amount }}
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Payer</label>
+            {{ form.payer }}
+        </div>
+
+        <button type="submit" class="btn btn-success w-100">Add Expense</button>
+    </form>
+
+    <a href="{% url 'budget_detail' budget.id %}" class="btn btn-secondary mt-3">Back to Balances</a>
+</div>
+{% endblock %}

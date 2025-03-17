@@ -2,36 +2,51 @@
 
 {% block content %}
 <div class="container">
-    <h2 class="text-center">Financial Report</h2>
+    <h2 class="text-center mb-4">Financial Report</h2>
 
+    <!-- 🔹 Date Filter Form -->
     <form method="GET" class="row g-3 mb-4">
         <div class="col-md-5">
             <label class="form-label">From:</label>
-            <input type="date" name="date_from" class="form-control">
+            <input type="date" name="date_from" class="form-control" value="{{ request.GET.date_from }}">
         </div>
         <div class="col-md-5">
             <label class="form-label">To:</label>
-            <input type="date" name="date_to" class="form-control">
+            <input type="date" name="date_to" class="form-control" value="{{ request.GET.date_to }}">
         </div>
         <div class="col-md-2 d-flex align-items-end">
             <button type="submit" class="btn btn-primary w-100">Filter</button>
         </div>
     </form>
 
-    <h4>Summary</h4>
-    <p><strong>Total Income:</strong> ${{ total_income }}</p>
-    <p><strong>Total Expenses:</strong> ${{ total_expense }}</p>
-    <p><strong>Net Savings:</strong> 
-        ${{ total_income|floatformat:2 }} - ${{ total_expense|floatformat:2 }} = 
-        ${{ total_income|floatformat:2|add:total_expense|floatformat:2 }}
-    </p>
+    <!-- 🔹 Summary Section -->
+    <div class="card shadow p-4">
+        <h4 class="mb-3">Summary</h4>
+        <p><strong>Total Income:</strong> <span class="text-success">${{ total_income|floatformat:2 }}</span></p>
+        <p><strong>Total Expenses:</strong> <span class="text-danger">${{ total_expense|floatformat:2 }}</span></p>
+        <p><strong>Net Savings:</strong> 
+            ${{ total_income|floatformat:2 }} - ${{ total_expense|floatformat:2 }} = 
+            {{ total_income|add:"-0"|floatformat:2|add:total_expense|floatformat:2 }}
+        </p>
+    </div>
 
+    <!-- 🔹 Income vs Expenses Pie Chart -->
+    {% if pie_chart %}
+        <h4 class="mt-4">Income vs Expenses</h4>
+        <img src="data:image/png;base64,{{ pie_chart }}" class="img-fluid shadow">
+    {% else %}
+        <p class="text-muted text-center mt-3">No data available to generate a pie chart.</p>
+    {% endif %}
 
-    <h4>Income vs Expenses</h4>
-    <img src="data:image/png;base64,{{ pie_chart }}" class="img-fluid shadow">
+    <!-- 🔹 Monthly Spending Trends Bar Chart -->
+    {% if bar_chart %}
+        <h4 class="mt-4">📊 Monthly Income vs Expenses</h4>
+        <img src="data:image/png;base64,{{ bar_chart }}" class="img-fluid shadow">
+    {% endif %}
 
-    <div class="mt-4">
-        <a href="{% url 'generate_pdf' %}" class="btn btn-secondary">Download PDF Report</a>
+    <!-- 🔹 Download Report Button -->
+    <div class="mt-4 text-center">
+        <a href="{% url 'generate_pdf' %}" class="btn btn-secondary">📄 Download PDF Report</a>
     </div>
 </div>
 {% endblock %}

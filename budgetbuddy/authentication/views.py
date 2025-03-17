@@ -1,7 +1,8 @@
-from django.contrib.auth import authenticate, login, logout, get_user_model
-from django.contrib import messages 
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash, get_user_model
+from django.contrib import messages
 from django.shortcuts import render, redirect
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm, UserChangeForm, PasswordChangeForm
+from django.contrib.auth.decorators import login_required
 from rest_framework.response import Response
 from rest_framework import status, generics, permissions
 from rest_framework.authtoken.models import Token
@@ -51,7 +52,7 @@ class LogoutAPIView(APIView):
 
 
 # -------------------------
-# ✅ API Views (Function-Based Alternative)
+# ✅ Function-Based API Views (Alternative)
 # -------------------------
 
 @api_view(["POST"])
@@ -84,40 +85,63 @@ def logout_api_view(request):
 # -------------------------
 
 def register_view(request):
-    if request.method == 'POST':
-        form = CustomUserCreationForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            login(request, user)  # Log in the user automatically
-            messages.success(request, "Registration successful! Redirecting to dashboard...")
-            return redirect('dashboard')  # Redirect after successful signup
-        else:
-            messages.error(request, "Registration failed. Please correct the errors below.")
-    else:
-        form = CustomUserCreationForm()
+    """Handles user registration via web form"""
+    form = CustomUserCreationForm(request.POST or None)
 
-    return render(request, 'authentication/register.html', {'form': form})
+    if request.method == "POST" and form.is_valid():
+        user = form.save()
+        login(request, user)  # Auto-login after registration
+        messages.success(request, "🎉 Registration successful! Redirecting to dashboard...")
+        return redirect("dashboard")
+    
+    return render(request, "authentication/register.html", {"form": form})
 
 
 def login_view(request):
-    if request.method == 'POST':
-        form = AuthenticationForm(request, data=request.POST)
-        if form.is_valid():
-            user = form.get_user()
-            login(request, user)
-            messages.success(request, "Login successful! Redirecting to dashboard...")
-            return redirect('dashboard')  # Redirect to dashboard after login
-        else:
-            messages.error(request, "Invalid username or password. Please try again.")
-    else:
-        form = AuthenticationForm()
+    """Handles user login via web form"""
+    form = AuthenticationForm(request, data=request.POST or None)
 
-    return render(request, 'authentication/login.html', {'form': form})
+    if request.method == "POST" and form.is_valid():
+        login(request, form.get_user())
+        messages.success(request, "✅ Login successful! Redirecting to dashboard...")
+        return redirect("dashboard")
+
+    messages.error(request, "⚠️ Invalid username or password. Please try again.")
+    return render(request, "authentication/login.html", {"form": form})
 
 
 def logout_view(request):
     """Handles user logout via web form"""
     if request.method == "POST":
         logout(request)
+        messages.success(request, "👋 You have been logged out.")
         return redirect("login")
     return render(request, "authentication/logout.html")
+
+
+# -------------------------
+# ✅ User Profile & Settings
+# -------------------------
+
+@login_required
+def user_settings(request):
+    """Allows users to update their profile and change their password"""
+    profile_form = UserChangeForm(request.POST or None, instance=request.user)
+    password_form = PasswordChangeForm(request.user, request.POST or None)
+
+    if request.method == "POST":
+        if "update_profile" in request.POST and profile_form.is_valid():
+            profile_form.save()
+            messages.success(request, "✅ Profile updated successfully!")
+            return redirect("user_settings")
+
+        elif "update_password" in request.POST and password_form.is_valid():
+            user = password_form.save()
+            update_session_auth_hash(request, user)  # Keep user logged in
+            messages.success(request, "🔑 Password changed successfully!")
+            return redirect("user_settings")
+
+    return render(request, "authentication/user_settings.html", {
+        "profile_form": profile_form,
+        "password_form": password_form,
+    })
