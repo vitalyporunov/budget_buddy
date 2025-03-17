@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'authentication',
     'transactions',
+    'dashboard',
     'rest_framework',
     'rest_framework.authtoken',
     'corsheaders',
@@ -76,6 +77,7 @@ TEMPLATES = [
     },
 ]
 
+LOGIN_URL = '/auth/login/'
 LOGIN_REDIRECT_URL = 'dashboard'  
 LOGOUT_REDIRECT_URL = 'login' 
 

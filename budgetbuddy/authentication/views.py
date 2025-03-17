@@ -1,4 +1,5 @@
 from django.contrib.auth import authenticate, login, logout, get_user_model
+from django.contrib import messages 
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import AuthenticationForm
 from rest_framework.response import Response
@@ -12,7 +13,7 @@ from .forms import CustomUserCreationForm
 User = get_user_model()
 
 # -------------------------
-# ✅ API Views (Class-Based) - Django REST Framework
+# ✅ API Views (Django REST Framework)
 # -------------------------
 
 class RegisterAPIView(generics.CreateAPIView):
@@ -50,7 +51,7 @@ class LogoutAPIView(APIView):
 
 
 # -------------------------
-# ✅ API Views (Function-Based) - Alternative DRF Approach
+# ✅ API Views (Function-Based Alternative)
 # -------------------------
 
 @api_view(["POST"])
@@ -83,22 +84,35 @@ def logout_api_view(request):
 # -------------------------
 
 def register_view(request):
-    """Handles user registration via web form"""
-    form = CustomUserCreationForm(request.POST or None)
-    if request.method == "POST" and form.is_valid():
-        user = form.save()
-        login(request, user)
-        return redirect("dashboard")  # Redirect to dashboard after signup
-    return render(request, "authentication/register.html", {"form": form})
+    if request.method == 'POST':
+        form = CustomUserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)  # Log in the user automatically
+            messages.success(request, "Registration successful! Redirecting to dashboard...")
+            return redirect('dashboard')  # Redirect after successful signup
+        else:
+            messages.error(request, "Registration failed. Please correct the errors below.")
+    else:
+        form = CustomUserCreationForm()
+
+    return render(request, 'authentication/register.html', {'form': form})
 
 
 def login_view(request):
-    """Handles user login via web form"""
-    form = AuthenticationForm(request, data=request.POST or None)
-    if request.method == "POST" and form.is_valid():
-        login(request, form.get_user())
-        return redirect("dashboard")
-    return render(request, "authentication/login.html", {"form": form})
+    if request.method == 'POST':
+        form = AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            user = form.get_user()
+            login(request, user)
+            messages.success(request, "Login successful! Redirecting to dashboard...")
+            return redirect('dashboard')  # Redirect to dashboard after login
+        else:
+            messages.error(request, "Invalid username or password. Please try again.")
+    else:
+        form = AuthenticationForm()
+
+    return render(request, 'authentication/login.html', {'form': form})
 
 
 def logout_view(request):
