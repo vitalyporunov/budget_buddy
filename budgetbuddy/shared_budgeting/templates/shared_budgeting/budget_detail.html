@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <h2 class="text-center">{{ budget.name }}</h2>
+    <a href="{% url 'add_expense' budget.id %}" class="btn btn-primary mb-3">Add Expense</a>
+
+    <h4>Balances:</h4>
+    <ul class="list-group">
+        {% for user, amount in balances.items %}
+            <li class="list-group-item">{{ user.username }} owes ${{ amount }}</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

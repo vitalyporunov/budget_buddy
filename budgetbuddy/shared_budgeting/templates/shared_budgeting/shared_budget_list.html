@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <h2 class="text-center">Shared Budgets</h2>
+    <a href="{% url 'create_shared_budget' %}" class="btn btn-primary mb-3">Create Shared Budget</a>
+
+    <ul class="list-group">
+        {% for budget in budgets %}
+            <li class="list-group-item">
+                <a href="{% url 'budget_detail' budget.id %}">{{ budget.name }}</a>
+            </li>
+        {% empty %}
+            <li class="list-group-item text-center">No shared budgets yet.</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

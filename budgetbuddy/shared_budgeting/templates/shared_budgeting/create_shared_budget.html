@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h2 class="text-center">Create Shared Budget</h2>
+
+    <form method="post" class="card p-4 shadow">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label class="form-label">Budget Name</label>
+            {{ form.name }}
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Select Members</label>
+            {{ form.members }}
+        </div>
+
+        <button type="submit" class="btn btn-success">Create Budget</button>
+    </form>
+
+    <a href="{% url 'shared_budget_list' %}" class="btn btn-secondary mt-3">Back to Shared Budgets</a>
+</div>
+{% endblock %}

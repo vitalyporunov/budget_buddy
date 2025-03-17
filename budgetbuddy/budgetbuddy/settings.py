@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'dashboard',
     'investments',
     'savings',
+    'shared_budgeting',
     'rest_framework',
     'rest_framework.authtoken',
     'corsheaders',
