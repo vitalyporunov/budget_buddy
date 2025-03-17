@@ -25,6 +25,7 @@ urlpatterns = [
     path('investments/', include('investments.urls')),
     path('savings/', include('savings.urls')),
     path('shared_budgeting/', include('shared_budgeting.urls')),
+    path('reports/', include('reports.urls'))
 ]
 
 LOGIN_REDIRECT_URL = 'dashboard'  # Redirect to dashboard after login
