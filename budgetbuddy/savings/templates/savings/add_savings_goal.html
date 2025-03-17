@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <h2 class="text-center">Add Savings Goal</h2>
+    <form method="post" class="card p-4 shadow">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-success">Add Goal</button>
+    </form>
+    <a href="{% url 'savings_goal_list' %}" class="btn btn-secondary mt-3">Back to Goals</a>
+</div>
+{% endblock %}

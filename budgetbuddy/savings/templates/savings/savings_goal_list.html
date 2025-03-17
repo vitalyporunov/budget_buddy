@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <h2 class="text-center">My Savings Goals</h2>
+    <a href="{% url 'add_savings_goal' %}" class="btn btn-primary mb-3">Add Savings Goal</a>
+
+    <table class="table table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>Name</th>
+                <th>Target Amount</th>
+                <th>Current Savings</th>
+                <th>Progress</th>
+                <th>Deadline</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for goal in goals %}
+                <tr>
+                    <td>{{ goal.name }}</td>
+                    <td>${{ goal.target_amount }}</td>
+                    <td>${{ goal.current_savings }}</td>
+                    <td>
+                        <div class="progress">
+                            <div class="progress-bar bg-success" role="progressbar" style="width: {{ goal.progress_percentage }}%;" aria-valuenow="{{ goal.progress_percentage }}" aria-valuemin="0" aria-valuemax="100">{{ goal.progress_percentage }}%</div>
+                        </div>
+                    </td>
+                    <td>{{ goal.deadline }}</td>
+                    <td>
+                        <a href="{% url 'update_savings_goal' goal.id %}" class="btn btn-warning btn-sm">Edit</a>
+                        <a href="{% url 'delete_savings_goal' goal.id %}" class="btn btn-danger btn-sm">Delete</a>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="6" class="text-center">No savings goals found.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

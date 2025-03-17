@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'transactions',
     'dashboard',
     'investments',
+    'savings',
     'rest_framework',
     'rest_framework.authtoken',
     'corsheaders',

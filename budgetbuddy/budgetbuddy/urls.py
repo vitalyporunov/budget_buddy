@@ -23,6 +23,7 @@ urlpatterns = [
     path('transactions/', include('transactions.urls')),
     path('dashboard/', include('dashboard.urls')),
     path('investments/', include('investments.urls')),
+    path('savings/', include('savings.urls')),
 ]
 
 LOGIN_REDIRECT_URL = 'dashboard'  # Redirect to dashboard after login
