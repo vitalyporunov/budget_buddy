@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <h2 class="text-center">My Investments</h2>
+    <a href="{% url 'add_investment' %}" class="btn btn-primary mb-3">Add Investment</a>
+
+    <table class="table table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>Symbol</th>
+                <th>Name</th>
+                <th>Quantity</th>
+                <th>Purchase Price</th>
+                <th>Current Price</th>
+                <th>Total Value</th>
+                <th>Profit/Loss</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for data in investment_data %}
+                <tr>
+                    <td>{{ data.investment.symbol }}</td>
+                    <td>{{ data.investment.name }}</td>
+                    <td>{{ data.investment.quantity }}</td>
+                    <td>${{ data.investment.purchase_price }}</td>
+                    <td>${{ data.current_price }}</td>
+                    <td>${{ data.total_value }}</td>
+                    <td class="{% if data.profit_loss < 0 %}text-danger{% else %}text-success{% endif %}">
+                        ${{ data.profit_loss }}
+                    </td>
+                    <td>
+                        <a href="{% url 'delete_investment' data.investment.id %}" class="btn btn-danger btn-sm">Delete</a>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="8" class="text-center">No investments added.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

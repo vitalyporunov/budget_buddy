@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <h2 class="text-center">Add Investment</h2>
+    <form method="post" class="card p-4 shadow">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-success">Add Investment</button>
+    </form>
+    <a href="{% url 'investment_list' %}" class="btn btn-secondary mt-3">Back to Investments</a>
+</div>
+{% endblock %}
