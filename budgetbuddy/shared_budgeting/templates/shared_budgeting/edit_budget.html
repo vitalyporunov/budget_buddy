@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block content %}
+<h3>Edit Shared Budget</h3>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button class="btn btn-success" type="submit">Save Changes</button>
+    <a href="{% url 'shared_budget_list' %}" class="btn btn-secondary">Cancel</a>
+</form>
+{% endblock %}

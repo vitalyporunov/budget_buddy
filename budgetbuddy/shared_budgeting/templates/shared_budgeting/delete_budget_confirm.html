@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block content %}
+<h3>Delete Shared Budget: "{{ budget.name }}"?</h3>
+<p>This action cannot be undone. All related expenses will be deleted.</p>
+<form method="post">
+    {% csrf_token %}
+    <button class="btn btn-danger" type="submit">Yes, delete it</button>
+    <a href="{% url 'shared_budget_list' %}" class="btn btn-secondary">Cancel</a>
+</form>
+{% endblock %}

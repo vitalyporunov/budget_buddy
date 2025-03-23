@@ -1,17 +1,31 @@
 {% extends 'base.html' %}
+
 {% block content %}
 <div class="container">
-    <h2 class="text-center">Shared Budgets</h2>
-    <a href="{% url 'create_shared_budget' %}" class="btn btn-primary mb-3">Create Shared Budget</a>
+    <h2 class="text-center mb-4">Shared Budgets</h2>
 
-    <ul class="list-group">
-        {% for budget in budgets %}
-            <li class="list-group-item">
-                <a href="{% url 'budget_detail' budget.id %}">{{ budget.name }}</a>
-            </li>
-        {% empty %}
-            <li class="list-group-item text-center">No shared budgets yet.</li>
-        {% endfor %}
-    </ul>
+    <div class="d-flex justify-content-start mb-3">
+        <a href="{% url 'create_shared_budget' %}" class="btn btn-primary">
+          Create Shared Budget
+        </a>
+      </div>
+
+    {% if budgets %}
+        <ul class="list-group">
+            {% for budget in budgets %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <a href="{% url 'budget_detail' budget.id %}" class="text-decoration-none">
+                        {{ budget.name }}
+                    </a>
+                    <div>
+                        <a href="{% url 'edit_shared_budget' budget.pk %}" class="btn btn-sm btn-outline-primary me-2">Edit</a>
+                        <a href="{% url 'delete_shared_budget' budget.pk %}" class="btn btn-sm btn-outline-danger">Delete</a>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <div class="alert alert-info text-center">No shared budgets yet.</div>
+    {% endif %}
 </div>
 {% endblock %}

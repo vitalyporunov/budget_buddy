@@ -5,42 +5,39 @@ from .models import SharedBudget, Expense, ExpenseSplit
 from .forms import SharedBudgetForm, ExpenseForm
 
 # -------------------------
-# ✅ List All Shared Budgets
+# 🌐 List Shared Budgets
 # -------------------------
 @login_required
 def shared_budget_list(request):
-    """View to list shared budgets where the user is a member"""
     budgets = SharedBudget.objects.filter(members=request.user)
     return render(request, 'shared_budgeting/shared_budget_list.html', {'budgets': budgets})
 
+
 # -------------------------
-# ✅ Create a Shared Budget
+# ➕ Create Shared Budget
 # -------------------------
 @login_required
 def create_shared_budget(request):
-    """View to create a new shared budget"""
     form = SharedBudgetForm(request.POST or None)
-
     if request.method == 'POST' and form.is_valid():
         budget = form.save(commit=False)
         budget.created_by = request.user
         budget.save()
-        form.save_m2m()  # Save many-to-many relationships
+        form.save_m2m()
         messages.success(request, "🎉 Shared Budget Created Successfully!")
         return redirect('shared_budget_list')
-
     return render(request, 'shared_budgeting/create_shared_budget.html', {'form': form})
 
+
 # -------------------------
-# ✅ View Budget Details & Balances
+# 🔍 View Budget Details
 # -------------------------
 @login_required
 def budget_detail(request, budget_id):
-    """View details of a shared budget, including expenses & balances"""
     budget = get_object_or_404(SharedBudget, id=budget_id, members=request.user)
     expenses = Expense.objects.filter(budget=budget).prefetch_related('expensesplit_set')
 
-    # Calculate who owes what
+    # Calculate balances per user
     balances = {}
     for expense in expenses:
         for split in expense.expensesplit_set.all():
@@ -52,12 +49,12 @@ def budget_detail(request, budget_id):
         'balances': balances
     })
 
+
 # -------------------------
-# ✅ Add an Expense to a Budget
+# ➕ Add Expense to Shared Budget
 # -------------------------
 @login_required
 def add_expense(request, budget_id):
-    """View to add an expense to a shared budget"""
     budget = get_object_or_404(SharedBudget, id=budget_id, members=request.user)
     form = ExpenseForm(request.POST or None)
 
@@ -66,15 +63,51 @@ def add_expense(request, budget_id):
         expense.budget = budget
         expense.save()
 
-        # Split expense equally among members
         members = list(budget.members.all())
-        split_amount = round(expense.amount / len(members), 2)
-
-        ExpenseSplit.objects.bulk_create([
-            ExpenseSplit(expense=expense, user=member, amount_owed=split_amount) for member in members
-        ])
+        if members:
+            split_amount = round(expense.amount / len(members), 2)
+            ExpenseSplit.objects.bulk_create([
+                ExpenseSplit(expense=expense, user=member, amount_owed=split_amount) for member in members
+            ])
 
         messages.success(request, "✅ Expense Added Successfully!")
         return redirect('budget_detail', budget_id=budget.id)
 
     return render(request, 'shared_budgeting/add_expense.html', {'form': form, 'budget': budget})
+
+
+# -------------------------
+# ✏️ Edit Shared Budget
+# -------------------------
+@login_required
+def edit_shared_budget(request, pk):
+    budget = get_object_or_404(SharedBudget, pk=pk)
+    if request.user != budget.created_by:
+        messages.warning(request, "You are not authorized to edit this budget.")
+        return redirect('shared_budget_list')
+
+    form = SharedBudgetForm(request.POST or None, instance=budget)
+    if request.method == 'POST' and form.is_valid():
+        form.save()
+        messages.success(request, "✅ Shared Budget Updated!")
+        return redirect('shared_budget_list')
+
+    return render(request, 'shared_budgeting/edit_budget.html', {'form': form, 'budget': budget})
+
+
+# -------------------------
+# ❌ Delete Shared Budget
+# -------------------------
+@login_required
+def delete_shared_budget(request, pk):
+    budget = get_object_or_404(SharedBudget, pk=pk)
+    if request.user != budget.created_by:
+        messages.warning(request, "You are not authorized to delete this budget.")
+        return redirect('shared_budget_list')
+
+    if request.method == 'POST':
+        budget.delete()
+        messages.success(request, "🗑️ Shared Budget Deleted.")
+        return redirect('shared_budget_list')
+
+    return render(request, 'shared_budgeting/delete_budget_confirm.html', {'budget': budget})
