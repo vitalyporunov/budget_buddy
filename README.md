@@ -29,14 +29,7 @@
 - Charts for income vs expenses
 - Monthly trends, summaries
 - Exportable insights
-
-### 📉 Debt Tracking (Planned)
-- Monitor loans and repayments
-
-### ⏰ Subscription & Bill Reminders (Planned)
-- Manage recurring expenses
-- Alert notifications
-
+  
 ### 👥 Shared Budgeting
 - Create shared budgets
 - Split expenses among members
