@@ -16,8 +16,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from dashboard.views import home 
 
 urlpatterns = [
+    path('', home, name='home'),
     path('admin/', admin.site.urls),
     path('auth/', include('authentication.urls')),
     path('transactions/', include('transactions.urls')),
@@ -28,5 +30,5 @@ urlpatterns = [
     path('reports/', include('reports.urls'))
 ]
 
-LOGIN_REDIRECT_URL = 'dashboard'  # Redirect to dashboard after login
+LOGIN_REDIRECT_URL = 'dashboard'  
 LOGOUT_REDIRECT_URL = 'login'

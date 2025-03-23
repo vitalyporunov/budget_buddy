@@ -71,3 +71,8 @@ def dashboard_view(request):
     }
 
     return render(request, 'dashboard/home.html', context)
+
+from django.shortcuts import render
+
+def home(request):
+    return render(request, 'home.html')

@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container text-center mt-5">
+    <h1 class="display-4 fw-bold">Welcome to BudgetBuddy</h1>
+    <p class="lead mt-3">Track expenses, set goals, and master your finances — all in one place.</p>
+
+    <div class="mt-4">
+        {% if user.is_authenticated %}
+            <a href="{% url 'dashboard' %}" class="btn btn-success btn-lg">Go to Dashboard</a>
+        {% else %}
+            <a href="{% url 'login' %}" class="btn btn-primary btn-lg me-3">Login</a>
+            <a href="{% url 'register' %}" class="btn btn-outline-primary btn-lg">Get Started</a>
+        {% endif %}
+    </div>
+
+    <div class="mt-5 row justify-content-center">
+        <div class="col-md-4">
+            <h5>💸 Expense Tracking</h5>
+            <p>Log every transaction and see where your money goes.</p>
+        </div>
+        <div class="col-md-4">
+            <h5>🎯 Financial Goals</h5>
+            <p>Set saving targets, track progress, and stay motivated.</p>
+        </div>
+        <div class="col-md-4">
+            <h5>📊 Reports & Insights</h5>
+            <p>Visualize your financial health and trends over time.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
