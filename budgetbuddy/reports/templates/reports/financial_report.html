@@ -2,51 +2,66 @@
 
 {% block content %}
 <div class="container">
-    <h2 class="text-center mb-4">Financial Report</h2>
+    <h2 class="text-center mb-4">📊 Financial Report</h2>
 
     <!-- 🔹 Date Filter Form -->
     <form method="GET" class="row g-3 mb-4">
         <div class="col-md-5">
             <label class="form-label">From:</label>
-            <input type="date" name="date_from" class="form-control" value="{{ request.GET.date_from }}">
+            <input type="date" name="date_from" class="form-control" value="{{ request.GET.date_from|default:'' }}">
         </div>
         <div class="col-md-5">
             <label class="form-label">To:</label>
-            <input type="date" name="date_to" class="form-control" value="{{ request.GET.date_to }}">
+            <input type="date" name="date_to" class="form-control" value="{{ request.GET.date_to|default:'' }}">
         </div>
         <div class="col-md-2 d-flex align-items-end">
             <button type="submit" class="btn btn-primary w-100">Filter</button>
         </div>
     </form>
 
-    <!-- 🔹 Summary Section -->
+    <!-- 🔹 Summary Card -->
     <div class="card shadow p-4">
         <h4 class="mb-3">Summary</h4>
-        <p><strong>Total Income:</strong> <span class="text-success">${{ total_income|floatformat:2 }}</span></p>
-        <p><strong>Total Expenses:</strong> <span class="text-danger">${{ total_expense|floatformat:2 }}</span></p>
+        <p><strong>Total Income:</strong> <span class="text-success">${{ total_income|default:0|floatformat:2 }}</span></p>
+        <p><strong>Total Expenses:</strong> <span class="text-danger">${{ total_expense|default:0|floatformat:2 }}</span></p>
         <p><strong>Net Savings:</strong> 
-            ${{ total_income|floatformat:2 }} - ${{ total_expense|floatformat:2 }} = 
-            {{ total_income|add:"-0"|floatformat:2|add:total_expense|floatformat:2 }}
+            <span class="{% if net_savings >= 0 %}text-success{% else %}text-danger{% endif %}">
+                ${{ net_savings|default:0|floatformat:2 }}
+            </span>
         </p>
     </div>
 
-    <!-- 🔹 Income vs Expenses Pie Chart -->
+    <!-- 🔹 Pie Chart -->
     {% if pie_chart %}
-        <h4 class="mt-4">Income vs Expenses</h4>
+        <h4 class="mt-5">Income vs Expenses</h4>
         <img src="data:image/png;base64,{{ pie_chart }}" class="img-fluid shadow">
     {% else %}
-        <p class="text-muted text-center mt-3">No data available to generate a pie chart.</p>
+        <p class="text-muted text-center mt-4">No data available to generate a pie chart.</p>
     {% endif %}
 
-    <!-- 🔹 Monthly Spending Trends Bar Chart -->
+    <!-- 🔹 Bar Chart -->
     {% if bar_chart %}
-        <h4 class="mt-4">📊 Monthly Income vs Expenses</h4>
+        <h4 class="mt-5">Monthly Income vs Expenses</h4>
         <img src="data:image/png;base64,{{ bar_chart }}" class="img-fluid shadow">
+    {% endif %}
+
+    <!-- 🔹 Investment Chart -->
+    {% if investment_chart %}
+        <h4 class="mt-5">📈 Investment Portfolio</h4>
+        <img src="data:image/png;base64,{{ investment_chart }}" class="img-fluid rounded shadow mb-4">
+    {% endif %}
+
+    <!-- 🔹 Shared Budget Chart -->
+    {% if shared_budget_chart %}
+        <h4 class="mt-5">🤝 Shared Budget Summary</h4>
+        <img src="data:image/png;base64,{{ shared_budget_chart }}" class="img-fluid rounded shadow mb-4">
     {% endif %}
 
     <!-- 🔹 Download Report Button -->
     <div class="mt-4 text-center">
-        <a href="{% url 'generate_pdf' %}" class="btn btn-secondary">📄 Download PDF Report</a>
+        <a href="{% url 'generate_pdf' %}?date_from={{ request.GET.date_from|default:'' }}&date_to={{ request.GET.date_to|default:'' }}" class="btn btn-secondary">
+            📄 Download PDF Report
+        </a>
     </div>
 </div>
 {% endblock %}
