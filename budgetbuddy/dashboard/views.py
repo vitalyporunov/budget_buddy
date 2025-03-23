@@ -76,3 +76,56 @@ from django.shortcuts import render
 
 def home(request):
     return render(request, 'home.html')
+
+
+import matplotlib.pyplot as plt
+import io, base64
+from datetime import datetime
+from django.db.models.functions import TruncMonth
+from django.db.models import Sum
+from transactions.models import Transaction
+
+
+def generate_monthly_income_expense_chart(user):
+    transactions = Transaction.objects.filter(user=user)
+
+    # Group by month
+    monthly_data = transactions.annotate(month=TruncMonth('date')).values('month', 'category').annotate(
+        total=Sum('amount')
+    ).order_by('month')
+
+    # Prepare data structure
+    income_data = {}
+    expense_data = {}
+    months = []
+
+    for item in monthly_data:
+        month_label = item['month'].strftime("%b %Y")
+        if month_label not in months:
+            months.append(month_label)
+
+        if item['category'] == 'income':
+            income_data[month_label] = item['total']
+        elif item['category'] == 'expense':
+            expense_data[month_label] = item['total']
+
+    income = [income_data.get(month, 0) for month in months]
+    expenses = [expense_data.get(month, 0) for month in months]
+
+    # Create chart
+    plt.figure(figsize=(8, 5))
+    x = range(len(months))
+    plt.bar(x, income, width=0.4, label='Income', align='center', color='mediumseagreen')
+    plt.bar([i + 0.4 for i in x], expenses, width=0.4, label='Expenses', align='center', color='salmon')
+    plt.xticks([i + 0.2 for i in x], months, rotation=45)
+    plt.ylabel("Amount ($)")
+    plt.title("Monthly Income & Expenses")
+    plt.legend()
+
+    # Return as base64 image
+    buffer = io.BytesIO()
+    plt.tight_layout()
+    plt.savefig(buffer, format='png')
+    plt.close()
+    buffer.seek(0)
+    return base64.b64encode(buffer.getvalue()).decode()
