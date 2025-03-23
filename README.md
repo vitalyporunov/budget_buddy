@@ -49,9 +49,3 @@
 - **API Integration**: Yahoo Finance (via `yfinance`)
 - **Testing**: Django `TestCase` framework
 - **Version Control**: Git
-
----
-
-## 📦 Project Structure
-budgetbuddy/ │ ├── authentication/ # User auth logic ├── transactions/ # Income and expense tracking ├── shared_budgeting/ # Expense sharing and group budgets ├── savings/ # Goal-based savings tracking ├── investments/ # Stock and crypto monitoring ├── reports/ # Financial charts and insights ├── dashboard/ # User dashboard and summary ├── templates/ # HTML templates ├── static/ # CSS/JS files └── manage.py
-
