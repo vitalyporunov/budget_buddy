@@ -23,11 +23,11 @@
                     <td>{{ data.investment.symbol }}</td>
                     <td>{{ data.investment.name }}</td>
                     <td>{{ data.investment.quantity }}</td>
-                    <td>${{ data.investment.purchase_price }}</td>
-                    <td>${{ data.current_price }}</td>
-                    <td>${{ data.total_value }}</td>
+                    <td>${{ data.investment.purchase_price |floatformat:2 }}</td>
+                    <td>${{ data.current_price |floatformat:2 }}</td>
+                    <td>${{ data.total_value |floatformat:2 }}</td>
                     <td class="{% if data.profit_loss < 0 %}text-danger{% else %}text-success{% endif %}">
-                        ${{ data.profit_loss }}
+                        ${{ data.profit_loss |floatformat:2 }}
                     </td>
                     <td>
                         <a href="{% url 'delete_investment' data.investment.id %}" class="btn btn-danger btn-sm">Delete</a>
