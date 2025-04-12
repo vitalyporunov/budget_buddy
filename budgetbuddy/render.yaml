@@ -1,24 +1,7 @@
-sservices:
+services:
   - type: web
     name: budgetbuddy
     env: python
-    rootDir: budgetbuddy  
     buildCommand: pip install -r requirements.txt
     startCommand: gunicorn budgetbuddy.wsgi:application
-    envVars:
-      - key: DJANGO_SETTINGS_MODULE
-        value: budgetbuddy.settings
-      - key: SECRET_KEY
-        generateValue: true
-      - key: DEBUG
-        value: False
-      - key: DATABASE_URL
-        fromDatabase:
-          name: budgetbuddy-db
-          property: connectionString
-
-databases:
-  - name: budgetbuddy-db
-    databaseName: budgetbuddy
-    user: budgetbuddy_user
-    plan: free
+    rootDir: .
