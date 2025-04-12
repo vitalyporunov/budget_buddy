@@ -1,5 +1,5 @@
 # budget_buddy
-# 💸 BudgetBuddy
+# 💸 BudgetBuddy (https://budget-buddy-afuz.onrender.com)
 
 **BudgetBuddy** is a modern, responsive, and feature-rich personal finance tracker built with Django and Bootstrap. It allows users to manage their income, expenses, budgets, savings goals, investments, and shared finances — all in one place!
 
