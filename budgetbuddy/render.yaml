@@ -4,4 +4,4 @@ services:
     env: python
     buildCommand: pip install -r requirements.txt
     startCommand: gunicorn budgetbuddy.wsgi:application
-    rootDir: .
+    rootDir: .  
