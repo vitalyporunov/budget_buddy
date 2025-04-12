@@ -2,8 +2,7 @@ services:
   - type: web
     name: budgetbuddy
     env: python
-    plan: free
-    buildCommand: pip install -r requirements.txt
+    buildCommand: cd budgetbuddy && pip install -r requirements.txt
     startCommand: gunicorn budgetbuddy.wsgi:application
     envVars:
       - key: DJANGO_SETTINGS_MODULE
