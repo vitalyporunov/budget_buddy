@@ -4,6 +4,7 @@ services:
     env: python
     buildCommand: cd budgetbuddy && pip install -r requirements.txt
     startCommand: gunicorn budgetbuddy.wsgi:application
+    rootDir: .
     envVars:
       - key: DJANGO_SETTINGS_MODULE
         value: budgetbuddy.settings
@@ -11,4 +12,3 @@ services:
         generateValue: true
       - key: DEBUG
         value: False
-rootDir: src
