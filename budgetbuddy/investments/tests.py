@@ -52,4 +52,4 @@ class InvestmentTests(TestCase):
         response = self.client.get(self.list_url)
 
         self.assertContains(response, 'AAPL')
-        self.assertNotContains(response, 'TSLA')  # Belongs to another user
+        self.assertNotContains(response, 'TSLA')  

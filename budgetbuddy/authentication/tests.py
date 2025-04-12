@@ -10,7 +10,7 @@ class AuthenticationTests(TestCase):
         self.register_url = reverse('register')
         self.login_url = reverse('login')
         self.logout_url = reverse('logout')
-        self.dashboard_url = reverse('dashboard')  # Or use another protected view if needed
+        self.dashboard_url = reverse('dashboard') 
         self.settings_url = reverse('user_settings')
 
         self.user = User.objects.create_user(username='testuser', password='testpass123')
@@ -26,7 +26,7 @@ class AuthenticationTests(TestCase):
             'password1': 'strongpassword123',
             'password2': 'strongpassword123'
         })
-        self.assertEqual(response.status_code, 302)  # Should redirect on success
+        self.assertEqual(response.status_code, 302) 
         self.assertTrue(User.objects.filter(username='newuser').exists())
 
     def test_login_view_GET(self):

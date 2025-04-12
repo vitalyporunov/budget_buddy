@@ -13,10 +13,10 @@ def fetch_stock_price(symbol):
     """
     try:
         stock = yf.Ticker(symbol)
-        live_price = stock.history(period="1d")['Close'].iloc[-1]  # Get last closing price
+        live_price = stock.history(period="1d")['Close'].iloc[-1]  
         return round(live_price, 2)
     except Exception:
-        return "N/A"  # Return 'N/A' if unable to fetch price
+        return "N/A"  
 
 # -------------------------
 # ✅ List Investments

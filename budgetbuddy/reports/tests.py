@@ -35,7 +35,7 @@ class ReportsTests(TestCase):
     def test_reports_view_requires_login(self):
         self.client.logout()
         response = self.client.get(reverse('financial_report'))
-        self.assertEqual(response.status_code, 302)  # should redirect to login
+        self.assertEqual(response.status_code, 302)  
 
     def test_reports_view_logged_in(self):
         response = self.client.get(reverse('financial_report'))

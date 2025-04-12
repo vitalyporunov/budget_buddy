@@ -17,7 +17,7 @@ User = get_user_model()
 class UserSettingsForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ['username', 'email']  # Add 'first_name', 'last_name' if needed
+        fields = ['username', 'email'] 
         widgets = {
             'username': forms.TextInput(attrs={'class': 'form-control'}),
             'email': forms.EmailInput(attrs={'class': 'form-control'}),

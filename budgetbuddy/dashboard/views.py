@@ -1,5 +1,5 @@
 import matplotlib
-matplotlib.use('Agg')  # Use Agg backend to prevent GUI errors
+matplotlib.use('Agg')  
 import matplotlib.pyplot as plt
 import seaborn as sns
 import io
@@ -42,7 +42,7 @@ def dashboard_view(request):
     monthly_totals = {}
 
     for transaction in monthly_data:
-        month = transaction['date'].strftime('%Y-%m')  # Get YYYY-MM format
+        month = transaction['date'].strftime('%Y-%m')  
         amount = Transaction.objects.filter(user=request.user, date__startswith=month).aggregate(Sum('amount'))['amount__sum'] or 0
         monthly_totals[month] = amount
 
@@ -56,7 +56,7 @@ def dashboard_view(request):
     # Save bar chart as image
     bar_buffer = io.BytesIO()
     plt.savefig(bar_buffer, format='png')
-    plt.close()  # Close the figure to free memory
+    plt.close()  
     bar_buffer.seek(0)
     bar_image = base64.b64encode(bar_buffer.getvalue()).decode()
     bar_buffer.close()
